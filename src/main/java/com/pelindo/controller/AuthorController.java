@@ -1,13 +1,14 @@
 package com.pelindo.controller;
 
 
+import com.pelindo.dto.SearchForm;
 import com.pelindo.entity.Author;
 import com.pelindo.repo.AuthorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -34,6 +35,10 @@ public class AuthorController {
         return repo.findAll();
     }
 
+    @RequestMapping(value = "/search",method = RequestMethod.POST)
+    public List<Author> findByName(@RequestBody SearchForm form){
+        return repo.findByName("%"+form.getKey()+"%");
+    }
 
 
 }

@@ -15,6 +15,8 @@ public class Book {
     @Column(length = 500)
     private String description;
     private double price;
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    private Author author;
 
 
     public Long getId() {
@@ -47,5 +49,13 @@ public class Book {
 
     public void setPrice(double price) {
         this.price = price;
+    }
+
+    public Author getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(Author author) {
+        this.author = author;
     }
 }
