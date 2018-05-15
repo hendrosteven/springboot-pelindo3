@@ -1,13 +1,19 @@
 package com.pelindo.controller;
 
 
+import com.pelindo.dto.ResponseData;
 import com.pelindo.dto.SearchForm;
 import com.pelindo.entity.Author;
 import com.pelindo.repo.AuthorRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.sql.DataSource;
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,15 +25,28 @@ public class AuthorController {
     @Autowired
     AuthorRepo repo;
 
+    @Autowired
+    DataSource dataSource;
+
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public Author saveAuthor(@RequestBody Author author){
-        return repo.save(author);
+    public ResponseEntity<?> saveAuthor(@Valid @RequestBody Author author, Errors errors){
+        ResponseData response  = new ResponseData();
+        if(errors.hasErrors()){
+            for(ObjectError err : errors.getAllErrors()){
+                response.getMessages().add(err.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(response);
+        }else {
+            response.getMessages().add("Author saved");
+            response.setData(repo.save(author));
+            return ResponseEntity.ok(response);
+        }
     }
 
     @RequestMapping(value = "/{id}",method = RequestMethod.GET)
-    public Optional<Author> findById(@PathVariable("id") Long id){
-        return repo.findById(id);
+    public Author findById(@PathVariable("id") Long id){
+        return repo.findOne(id);
     }
 
     @RequestMapping(method = RequestMethod.GET)

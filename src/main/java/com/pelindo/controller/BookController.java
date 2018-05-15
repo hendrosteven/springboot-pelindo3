@@ -1,14 +1,19 @@
 package com.pelindo.controller;
 
+
 import com.pelindo.dto.PriceForm;
+import com.pelindo.dto.ResponseData;
 import com.pelindo.dto.SearchForm;
 import com.pelindo.entity.Book;
 import com.pelindo.repo.BookRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/book")
@@ -18,18 +23,30 @@ public class BookController {
     private BookRepo repo;
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public Book saveBook(@RequestBody Book book){
-        return repo.save(book);
+    public ResponseEntity<?> saveBook(@Valid @RequestBody Book book, Errors errors){
+
+        ResponseData response  = new ResponseData();
+        if(errors.hasErrors()){
+            for(ObjectError err : errors.getAllErrors()){
+                response.getMessages().add(err.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(response);
+        }else {
+            response.getMessages().add("Book saved");
+            response.setData(repo.save(book));
+            return ResponseEntity.ok(response);
+        }
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET)
-    public Optional<Book> findById(@PathVariable("id") Long id){
-        return repo.findById(id);
+    public Book findById(@PathVariable("id") Long id) {
+        return repo.findOne(id);
+
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public Iterable<Book> findAll(){
-        return repo.findAll();
+        return  repo.findAll();
     }
 
     @RequestMapping(value = "/author/{id}",method = RequestMethod.GET)
