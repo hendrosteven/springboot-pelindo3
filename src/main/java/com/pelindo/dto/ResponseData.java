@@ -5,6 +5,7 @@ import java.util.List;
 
 public class ResponseData {
 
+    private boolean success;
     private List<String> messages = new ArrayList<>();
     private Object data;
 
@@ -23,5 +24,13 @@ public class ResponseData {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
     }
 }

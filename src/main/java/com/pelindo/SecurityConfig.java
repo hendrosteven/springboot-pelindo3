@@ -35,7 +35,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/book/**").permitAll()
                 .antMatchers(HttpMethod.GET, "/author/**").permitAll()
+                .antMatchers((HttpMethod.POST), "/book/search").permitAll()
+                .antMatchers((HttpMethod.POST), "/author/search").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and().httpBasic().and().csrf().disable();
     }
+
+//    @SuppressWarnings("deprecation")
+//    @Bean
+//    public static NoOpPasswordEncoder passwordEncoder() {
+//        return (NoOpPasswordEncoder) NoOpPasswordEncoder.getInstance();
+//    }
 }

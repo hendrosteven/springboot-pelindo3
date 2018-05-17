@@ -36,10 +36,12 @@ public class AuthorController {
             for(ObjectError err : errors.getAllErrors()){
                 response.getMessages().add(err.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(response);
+            response.setSuccess(false);
+            return ResponseEntity.ok(response);
         }else {
             response.getMessages().add("Author saved");
             response.setData(repo.save(author));
+            response.setSuccess(true);
             return ResponseEntity.ok(response);
         }
     }

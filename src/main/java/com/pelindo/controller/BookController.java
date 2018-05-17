@@ -30,9 +30,11 @@ public class BookController {
             for(ObjectError err : errors.getAllErrors()){
                 response.getMessages().add(err.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(response);
+            response.setSuccess(false);
+            return ResponseEntity.ok(response);
         }else {
             response.getMessages().add("Book saved");
+            response.setSuccess(true);
             response.setData(repo.save(book));
             return ResponseEntity.ok(response);
         }

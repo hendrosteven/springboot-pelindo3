@@ -30,20 +30,24 @@ public class UserController {
             for(ObjectError err: errors.getAllErrors()){
                 response.getMessages().add(err.getDefaultMessage());
             }
-            return ResponseEntity.badRequest().body(response);
+            response.setSuccess(false);
+            return ResponseEntity.ok(response);
         }
         try {
             User output = userService.register(user);
             response.setData(output);
+            response.setSuccess(true);
             return ResponseEntity.ok(response);
         }catch (Exception ex){
             response.getMessages().add(ex.getMessage());
-            return ResponseEntity.badRequest().body(response);
+            response.setSuccess(false);
+            return ResponseEntity.ok(response);
         }
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/login")
     public User login(@RequestBody LoginForm form) throws Exception {
+
         return userService.login(form.getEmail(), form.getPassword());
     }
 
