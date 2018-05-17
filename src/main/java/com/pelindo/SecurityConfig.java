@@ -34,7 +34,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST, "/user/register").permitAll()
                 .antMatchers(HttpMethod.POST, "/user/login").permitAll()
                 .antMatchers(HttpMethod.GET, "/book/**").permitAll()
-                //.antMatchers(HttpMethod.GET, "/author/**").permitAll()
+                .antMatchers(HttpMethod.GET, "/author/**").permitAll()
                 .anyRequest().fullyAuthenticated()
                 .and().httpBasic().and().csrf().disable();
     }
