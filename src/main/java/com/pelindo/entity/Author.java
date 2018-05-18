@@ -1,12 +1,14 @@
 package com.pelindo.entity;
 
 
+import io.swagger.annotations.ApiModel;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 
+@ApiModel(description = "Class representing an Author tracked by the application.")
 @Entity
 @Table(name = "tbl_author")
 public class Author {
